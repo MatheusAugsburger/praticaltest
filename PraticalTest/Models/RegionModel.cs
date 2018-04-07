@@ -12,34 +12,42 @@ namespace PraticalTest.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public static List<RegionModel> BuscaRegion()
+        public static List<RegionModel> BuscaRegion(int? CityId)
         {
             var ret = new List<RegionModel>();
 
-            using (var conexao = new SqlConnection())
+           
+            using (var comando = new SqlCommand())
             {
-                conexao.ConnectionString = "Data Source=MATHEUS-PC;Initial Catalog=GerenciadorDeContatos;Integrated Security=True";
-                conexao.Open();
+                comando.Connection = Conexao.connection;
 
-                using (var comando = new SqlCommand())
+                if (CityId > 0)
                 {
-                    comando.Connection = conexao;
-
                     comando.CommandText = string.Format(
-                        "select * from Region ");
-                    var reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        ret.Add(new RegionModel
-                        {
-                            Id = (int)reader["Id"],
-                            Name = (string)reader["Name"]
-
-
-                        });
-                    }
+                            "select * from Region " +
+                            "INNER JOIN City on City.RegionId=Region.Id " +
+                            "where City.id = '{0}' ", CityId);
                 }
+                else
+                {
+                    comando.CommandText = string.Format(
+                            "select * from Region ");
+                }
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    ret.Add(new RegionModel
+                    {
+                        Id = (int)reader["Id"],
+                        Name = (string)reader["Name"]
+
+
+                    });
+                }
+                Conexao.Desconectar();
             }
+            
             return ret;
 
         }

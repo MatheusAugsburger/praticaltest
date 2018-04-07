@@ -1,0 +1,148 @@
+﻿@model PraticalTest.Models.CustomerListViewModel
+
+
+@{
+    ViewBag.Title = "Customer List";
+
+}
+
+<div id="contatos">
+    <section id="contatos_cabecalho">
+        <h1>
+            @ViewBag.Title
+        </h1>
+
+    </section>
+    <section id="contatos_conteudo">
+
+        <div id="cabecalho_grid" class="row" style="width:700px;">
+
+            @using (Html.BeginForm("CustomerList", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Get, new { @Id = "CustomerForm" , @clas = "form-horizontal", role = "form", @Style = "margin: 0 15px;" }))
+            {
+
+
+                <div style="display:block; float:right; margin:0 0;">
+                    <div class="form-group">
+                        <input id="btn_search" type="submit" class="btn btn-success" value="Search" />
+
+                    </div>
+                    <div class="form-group">
+                        <input id="btn_clear" type="button" class="btn" value="Clear Filds" onclick="clear();" />
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    @Html.Label("Name:")
+                    @Html.TextBox("Name")
+                    @Html.ValidationMessage("Name")
+
+                    @Html.Label("Gender:")
+                    @Html.DropDownListFor(m => m.Gender, new SelectList(this.Model.Gender, "ID", "Name"), "Select the subject", new { @id = "GenderId" })
+
+
+
+                </div>
+
+                <div class="form-group">
+
+                    @Html.Label("City:")
+                    @Html.DropDownListFor(m => m.City, new SelectList(this.Model.City, "ID", "Name"), "Select the subject", new { @id = "CityId", @onchange = "callSubmit();" })
+
+                    @Html.Label("Region:")
+                    @Html.DropDownListFor(m => m.Region, new SelectList(this.Model.Region, "ID", "Name"), "Select the subject", new { @id = "RegionId" })
+
+                </div>
+                <div class="form-group">
+                    @Html.Label("Last Purchase:")
+                    @Html.TextBoxFor(m => m.LastPurchaseIni, new { @type = "date", @id = "LastPurchaseFim" })
+
+
+                    @Html.Label("Until:")
+                    @Html.TextBoxFor(m => m.LastPurchaseFim, new { @type = "date", @id = "LastPurchaseFim" })
+
+                </div>
+                <div class="form-group">
+                    @Html.Label("Classification:")
+                    @Html.DropDownListFor(m => m.Classification, new SelectList(this.Model.Classification, "ID", "Name"), "Select the subject", new { @id = "ClassificationId" })
+
+                    @Html.Label("Seller")
+                    @Html.DropDownListFor(m => m.Seller, new SelectList(this.Model.Seller, "ID", "Name"), "Select the subject", new { @id = "SellerId" })
+
+
+
+
+                </div>
+
+            }
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="grid_contatos" class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Classification</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Gender</th>
+                            <th>City</th>
+                            <th>Region</th>
+                            <th>Last Phurcase</th>
+                            @if ((int)Session["UserRoleId"] == 1)
+                            {
+                                <th>Seller</th>
+                            }
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Contatos)
+                        {
+                            <tr>
+                                <th>@item.ClassificationName</th>
+                                <th>@item.Name</th>
+                                <th>@item.Phone</th>
+                                <th>@item.GenderName</th>
+                                <th>@item.CityName</th>
+                                <th>@item.RegionName</th>
+                                <th>@item.LastPurchase</th>
+                                @if ((int)Session["UserRoleId"] == 1)
+                                {
+                                    <th>@item.SellerName</th>
+                                }
+
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+    </section>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+        function callSubmit() {
+            document.getElementById("CustomerForm").submit();
+        };
+    </script>
+    <script type="text/javascript">
+        function clear() {
+            alert("agora");
+            document.getElementById("Name").value = "";
+            document.getElementById("Gender").value = 0;
+            document.getElementById("City").value = 0;
+            document.getElementById("Region").value = 0;
+            document.getElementById("LastPurchaseIni").value = "";
+            document.getElementById("LastPurchaseFim").value = "";
+            document.getElementById("Classification").value = 0;
+            document.getElementById("Seller").value = 0;
+        };
+    </script>
+}

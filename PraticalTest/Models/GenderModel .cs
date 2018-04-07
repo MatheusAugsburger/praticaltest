@@ -16,30 +16,29 @@ namespace PraticalTest.Models
         {
             var ret = new List<GenderModel>();
 
-            using (var conexao = new SqlConnection())
+          
+
+            using (var comando = new SqlCommand())
             {
-                conexao.ConnectionString = "Data Source=MATHEUS-PC;Initial Catalog=GerenciadorDeContatos;Integrated Security=True";
-                conexao.Open();
+                comando.Connection = Conexao.connection;
 
-                using (var comando = new SqlCommand())
+                comando.CommandText = string.Format(
+                    "select * from Gender ");
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
                 {
-                    comando.Connection = conexao;
-                    
-                    comando.CommandText = string.Format(
-                        "select * from Gender ");
-                    var reader = comando.ExecuteReader();
-                    while (reader.Read())
+                    ret.Add(new GenderModel
                     {
-                        ret.Add(new GenderModel
-                        {
-                            Id = (int)reader["Id"],
-                            Name = (string)reader["Name"]
+                        Id = (int)reader["Id"],
+                        Name = (string)reader["Name"]
 
 
-                        });
-                    }
+                    });
                 }
+                Conexao.Desconectar();
             }
+            
             return ret;
 
         }

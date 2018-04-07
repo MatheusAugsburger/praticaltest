@@ -143,14 +143,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ContaController.cs" />
-    <Compile Include="Controllers\ContatosController.cs" />
+    <Compile Include="Controllers\CustomerListController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ContatosModel.cs" />
+    <Compile Include="Models\Conexao.cs" />
+    <Compile Include="Models\CustomerListModel.cs" />
     <Compile Include="Models\SellerModel.cs" />
-    <Compile Include="Models\ContatosViewModel.cs" />
+    <Compile Include="Models\CustomerListViewModel.cs" />
     <Compile Include="Models\CityModel.cs" />
     <Compile Include="Models\RegionModel.cs" />
     <Compile Include="Models\ClassificationModel.cs" />
@@ -196,7 +197,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Conta\Login.cshtml" />
-    <Content Include="Views\Home\Contatos.cshtml" />
+    <Content Include="Views\Home\CustomerList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

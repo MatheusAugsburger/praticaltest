@@ -16,34 +16,38 @@ namespace PraticalTest.Models
         {
             var ret = new List<CityModel>();
 
-            using (var conexao = new SqlConnection())
+      
+            /*
+            conexao.ConnectionString = "Data Source=MATHEUS-PC;Initial Catalog=GerenciadorDeContatos;Integrated Security=True";
+            conexao.Open();
+            */
+            using (var comando = new SqlCommand())
             {
-                conexao.ConnectionString = "Data Source=MATHEUS-PC;Initial Catalog=GerenciadorDeContatos;Integrated Security=True";
-                conexao.Open();
 
-                using (var comando = new SqlCommand())
+                comando.Connection = Conexao.connection;
+     
+                /*
+                comando.CommandText = string.Format(
+                    "select * from Customer where Name='{0}' and GenderId='{1}' and CityId='{2}' " +
+                    "and RegionId='{3}' and LastPurchase>='{4}' and LastPurchase <='{5}' and ClassificationId='{6}'", Name, GenderId, CityId, RegionId, LastPurchaseIni, LastPurchaseFim, ClassificationId);
+                */
+                comando.CommandText = string.Format(
+                    "select * from City ");
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
                 {
-                    comando.Connection = conexao;
-                    /*
-                    comando.CommandText = string.Format(
-                        "select * from Customer where Name='{0}' and GenderId='{1}' and CityId='{2}' " +
-                        "and RegionId='{3}' and LastPurchase>='{4}' and LastPurchase <='{5}' and ClassificationId='{6}'", Name, GenderId, CityId, RegionId, LastPurchaseIni, LastPurchaseFim, ClassificationId);
-                    */
-                    comando.CommandText = string.Format(
-                        "select * from City ");
-                    var reader = comando.ExecuteReader();
-                    while (reader.Read())
+                    ret.Add(new CityModel
                     {
-                        ret.Add(new CityModel
-                        {
-                            Id = (int)reader["Id"],
-                            Name = (string)reader["Name"],
-                            RegionId = (int)reader["RegionId"]
+                        Id = (int)reader["Id"],
+                        Name = (string)reader["Name"],
+                        RegionId = (int)reader["RegionId"]
                             
-                        });
-                    }
+                    });
                 }
+                Conexao.Desconectar();
             }
+            
             return ret;
 
         }

@@ -8,13 +8,13 @@ namespace PraticalTest.Models
 {
     public class LoginViewModel
     {
-        [Required (ErrorMessage ="Favor informe o usuário!")]
-        [Display (Name="Usuário: ")]
+        [Required (ErrorMessage ="E-mail Invalid!")]
+        [Display (Name="E-mail: ")]
         public String Usuario { get; set; }
 
-        [Required(ErrorMessage = "Favor informe a senha!")]
+        [Required(ErrorMessage = "Password Invalid!")]
         [DataType(DataType.Password)]
-        [Display(Name = "Senha: ")]
+        [Display(Name = "Password: ")]
         public String Senha { get; set; }
 
         

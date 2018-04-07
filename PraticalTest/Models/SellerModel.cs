@@ -11,35 +11,96 @@ namespace PraticalTest.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public bool IsAdmin { get; set; }
-        public static List<SellerModel> BuscaSeller()
+        public int UserRoleId { get; set; }
+        public static SellerModel BuscaUnicaSeller(int id)
+        {
+
+            var ret = new SellerModel();
+            
+            using (var comando = new SqlCommand())
+            {
+                comando.Connection = Conexao.connection;
+
+                comando.CommandText = string.Format(
+                    "select * from UserSys where id = '{0}'",id);
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+
+                    ret.Id = (int)reader["Id"];
+                    ret.Name = (string)reader["Login"];
+                    ret.UserRoleId = (int)reader["UserRoleId"];
+
+                }
+                Conexao.Desconectar();
+            }
+
+            return ret;
+
+        }
+        public static SellerModel BuscaPorEmailSeller(string email)
+        {
+
+            var ret = new SellerModel();
+
+            using (var comando = new SqlCommand())
+            {
+                comando.Connection = Conexao.connection;
+
+                comando.CommandText = string.Format(
+                    "select * from UserSys where email = '{0}'", email);
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+
+                    ret.Id = (int)reader["Id"];
+                    ret.Name = (string)reader["Login"];
+                    ret.UserRoleId = (int)reader["UserRoleId"];
+
+                }
+                Conexao.Desconectar();
+            }
+
+            return ret;
+
+        }
+        public static List<SellerModel> BuscaSeller(string email)
         {
             var ret = new List<SellerModel>();
+    
+            SellerModel Seller = BuscaPorEmailSeller(email);
 
-            using (var conexao = new SqlConnection())
+            using (var comando = new SqlCommand())
             {
-                conexao.ConnectionString = "Data Source=MATHEUS-PC;Initial Catalog=GerenciadorDeContatos;Integrated Security=True";
-                conexao.Open();
+                comando.Connection = Conexao.connection;
 
-                using (var comando = new SqlCommand())
+                if (Seller.UserRoleId == 1)
                 {
-                    comando.Connection = conexao;
-
                     comando.CommandText = string.Format(
-                        "select * from UserRole ");
-                    var reader = comando.ExecuteReader();
-                    while (reader.Read())
-                    {
-                        ret.Add(new SellerModel
-                        {
-                            Id = (int)reader["Id"],
-                            Name = (string)reader["Name"],
-                            IsAdmin = (bool)reader["IsAdmin"]
-
-                        });
-                    }
+                    "select * from UserSys ");
                 }
+                else
+                {
+                    comando.CommandText = string.Format(
+                    "select * from UserSys where id = '{0}'",Seller.Id);
+                }
+                
+                Conexao.Conectar();
+                var reader = comando.ExecuteReader();
+                while (reader.Read())
+                {
+                    ret.Add(new SellerModel
+                    {
+                        Id = (int)reader["Id"],
+                        Name = (string)reader["Login"]
+
+                    });
+                }
+                Conexao.Desconectar();
             }
+            
             return ret;
 
         }
